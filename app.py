@@ -3,14 +3,14 @@ from tabulate import tabulate  # Importando a biblioteca tabulate
 
 # Definindo as variáveis para cada voo
 voo_1 = {
-    'Número do voo': '9164',  # Sem "Voo"
+    'Número do voo': '9164',
     'Hora do voo': '03:20',
-    'Apenas milhas': 130000,
+    'Apenas milhas': 118000,
     'Milhas + dinheiro': {
-        'Milhas': 13000,
-        'Dinheiro': 1887.00
+        'Milhas': 11800,
+        'Dinheiro': 1732.00
     },
-    'Apenas dinheiro': 2156.46,
+    'Apenas dinheiro': 2339.45,
     'Escala': 'Direto'
 }
 
@@ -29,12 +29,12 @@ voo_2 = {
 voo_3 = {
     'Número do voo': '2778',
     'Hora do voo': '10:10',
-    'Apenas milhas': 130000,
+    'Apenas milhas': 124000,
     'Milhas + dinheiro': {
-        'Milhas': 13000,
-        'Dinheiro': 1982.00
+        'Milhas': 12400,
+        'Dinheiro': 1818.00
     },
-    'Apenas dinheiro': 2258.46,
+    'Apenas dinheiro': 2450.63,
     'Escala': 'Direto'
 }
 
@@ -80,9 +80,9 @@ voo_7 = {
     'Apenas milhas': 102000,
     'Milhas + dinheiro': {
         'Milhas': 15300,
-        'Dinheiro': 2062.00
+        'Dinheiro': 1892.00
     },
-    'Apenas dinheiro': 2345.46,
+    'Apenas dinheiro': 2545.46,
     'Escala': 'Com Escala'
 }
 
@@ -159,11 +159,15 @@ menor_valor_combined = df_sorted_combined['Apenas dinheiro'].str.replace('R$ ', 
 df_sorted_combined['% de Aumento'] = ((df_sorted_combined['Apenas dinheiro'].str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float) - menor_valor_combined) / menor_valor_combined * 100).round(1)
 df_sorted_combined['% de Aumento'] = df_sorted_combined['% de Aumento'].apply(formatar_porcentagem)
 
+# Ordenando os DataFrames pelas colunas de "Apenas dinheiro"
+df_sorted_milhas = df_sorted_milhas.sort_values(by='Apenas dinheiro', key=lambda x: x.str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float))
+df_sorted_combined = df_sorted_combined.sort_values(by='Apenas dinheiro', key=lambda x: x.str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float))
+
 # Exibir os resultados com tabulate
-print("Ordenado por Apenas Milhas x Apenas Dinheiro:")
+print("Ordenado por Apenas Milhas x Apenas Dinheiro, em ordem crescente de preço:")
 print(tabulate(df_sorted_milhas[['Objeto', 'Número do voo', 'Hora do voo', 'Apenas milhas', 'Apenas dinheiro', '% de Aumento', 'Escala']],
                 headers='keys', tablefmt='pretty', showindex=False))
 
-print("\nOrdenado por (Milhas + Dinheiro):")
+print("\nOrdenado por (Milhas + Dinheiro), em ordem crescente de preço:")
 print(tabulate(df_sorted_combined[['Objeto', 'Número do voo', 'Hora do voo', 'Milhas + dinheiro', 'Apenas dinheiro', '% de Aumento', 'Escala']],
                 headers='keys', tablefmt='pretty', showindex=False))
