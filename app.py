@@ -1,8 +1,9 @@
 import pandas as pd
 from tabulate import tabulate  # Importando a biblioteca tabulate
 
-# Definindo as variáveis para cada voo
+# Definindo as variáveis para cada voo com a adição da data
 voo_1 = {
+    'Data voo': '27/12/2024',
     'Número do voo': '9164',
     'Hora do voo': '03:20',
     'Apenas milhas': 118000,
@@ -15,6 +16,7 @@ voo_1 = {
 }
 
 voo_2 = {
+    'Data voo': '27/12/2024',
     'Número do voo': '2613',
     'Hora do voo': '06:20',
     'Apenas milhas': 92000,
@@ -27,6 +29,7 @@ voo_2 = {
 }
 
 voo_3 = {
+    'Data voo': '27/12/2024',
     'Número do voo': '2778',
     'Hora do voo': '10:10',
     'Apenas milhas': 124000,
@@ -39,6 +42,7 @@ voo_3 = {
 }
 
 voo_4 = {
+    'Data voo': '27/12/2024',
     'Número do voo': '4849',
     'Hora do voo': '14:20',
     'Apenas milhas': 130000,
@@ -51,6 +55,7 @@ voo_4 = {
 }
 
 voo_5 = {
+    'Data voo': '27/12/2024',
     'Número do voo': '2808',
     'Hora do voo': '18:50',
     'Apenas milhas': 130000,
@@ -63,6 +68,7 @@ voo_5 = {
 }
 
 voo_6 = {
+    'Data voo': '27/12/2024',
     'Número do voo': '4368',
     'Hora do voo': '23:40',
     'Apenas milhas': 130000,
@@ -75,6 +81,7 @@ voo_6 = {
 }
 
 voo_7 = {
+    'Data voo': '27/12/2024',
     'Número do voo': '2621',
     'Hora do voo': '09:25',
     'Apenas milhas': 102000,
@@ -87,6 +94,7 @@ voo_7 = {
 }
 
 voo_8 = {
+    'Data voo': '27/12/2024',
     'Número do voo': '2784',
     'Hora do voo': '13:10',
     'Apenas milhas': 92000,
@@ -163,11 +171,11 @@ df_sorted_combined['% de Aumento'] = df_sorted_combined['% de Aumento'].apply(fo
 df_sorted_milhas = df_sorted_milhas.sort_values(by='Apenas dinheiro', key=lambda x: x.str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float))
 df_sorted_combined = df_sorted_combined.sort_values(by='Apenas dinheiro', key=lambda x: x.str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float))
 
-# Exibir os resultados com tabulate
+# Exibir os resultados com tabulate, incluindo a nova coluna "Data voo"
 print("Ordenado por Apenas Milhas x Apenas Dinheiro, em ordem crescente de preço:")
-print(tabulate(df_sorted_milhas[['Objeto', 'Número do voo', 'Hora do voo', 'Apenas milhas', 'Apenas dinheiro', '% de Aumento', 'Escala']],
+print(tabulate(df_sorted_milhas[['Data voo', 'Objeto', 'Número do voo', 'Hora do voo', 'Apenas milhas', 'Apenas dinheiro', '% de Aumento', 'Escala']],
                 headers='keys', tablefmt='pretty', showindex=False))
 
 print("\nOrdenado por (Milhas + Dinheiro), em ordem crescente de preço:")
-print(tabulate(df_sorted_combined[['Objeto', 'Número do voo', 'Hora do voo', 'Milhas + dinheiro', 'Apenas dinheiro', '% de Aumento', 'Escala']],
+print(tabulate(df_sorted_combined[['Data voo', 'Objeto', 'Número do voo', 'Hora do voo', 'Milhas + dinheiro', 'Apenas dinheiro', '% de Aumento', 'Escala']],
                 headers='keys', tablefmt='pretty', showindex=False))
