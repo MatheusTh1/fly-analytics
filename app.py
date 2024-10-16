@@ -1,7 +1,7 @@
 import pandas as pd
-from tabulate import tabulate  # Importando a biblioteca tabulate
+from tabulate import tabulate
 
-# Definindo as variáveis para cada voo com a adição da data
+# Definindo as variáveis para cada voo com a nova chave 'Data voo'
 voo_1 = {
     'Data voo': '27/12/2024',
     'Número do voo': '9164',
@@ -28,154 +28,114 @@ voo_2 = {
     'Escala': 'Direto'
 }
 
-voo_3 = {
-    'Data voo': '27/12/2024',
-    'Número do voo': '2778',
-    'Hora do voo': '10:10',
-    'Apenas milhas': 124000,
-    'Milhas + dinheiro': {
-        'Milhas': 12400,
-        'Dinheiro': 1818.00
-    },
-    'Apenas dinheiro': 2450.63,
-    'Escala': 'Direto'
-}
-
-voo_4 = {
-    'Data voo': '27/12/2024',
-    'Número do voo': '4849',
-    'Hora do voo': '14:20',
-    'Apenas milhas': 130000,
-    'Milhas + dinheiro': {
-        'Milhas': 13000,
-        'Dinheiro': 3035.00
-    },
-    'Apenas dinheiro': 3689.46,
-    'Escala': 'Direto'
-}
-
-voo_5 = {
-    'Data voo': '27/12/2024',
-    'Número do voo': '2808',
-    'Hora do voo': '18:50',
-    'Apenas milhas': 130000,
-    'Milhas + dinheiro': {
-        'Milhas': 13000,
-        'Dinheiro': 3061.00
-    },
-    'Apenas dinheiro': 3720.46,
-    'Escala': 'Direto'
-}
-
-voo_6 = {
-    'Data voo': '27/12/2024',
-    'Número do voo': '4368',
-    'Hora do voo': '23:40',
-    'Apenas milhas': 130000,
-    'Milhas + dinheiro': {
-        'Milhas': 13000,
-        'Dinheiro': 3035.00
-    },
-    'Apenas dinheiro': 3689.46,
-    'Escala': 'Direto'
-}
-
-voo_7 = {
-    'Data voo': '27/12/2024',
-    'Número do voo': '2621',
-    'Hora do voo': '09:25',
-    'Apenas milhas': 102000,
-    'Milhas + dinheiro': {
-        'Milhas': 15300,
-        'Dinheiro': 1892.00
-    },
-    'Apenas dinheiro': 2545.46,
-    'Escala': 'Com Escala'
-}
-
-voo_8 = {
-    'Data voo': '27/12/2024',
-    'Número do voo': '2784',
-    'Hora do voo': '13:10',
-    'Apenas milhas': 92000,
-    'Milhas + dinheiro': {
-        'Milhas': 13800,
-        'Dinheiro': 1892.00
-    },
-    'Apenas dinheiro': 2345.46,
-    'Escala': 'Com Escala'
-}
-
-# Criando uma lista de voos com o objeto correspondente
+# Criando a lista de voos
 voos = [
     {'Objeto': 'voo_1', **voo_1},
-    {'Objeto': 'voo_2', **voo_2},
-    {'Objeto': 'voo_3', **voo_3},
-    {'Objeto': 'voo_4', **voo_4},
-    {'Objeto': 'voo_5', **voo_5},
-    {'Objeto': 'voo_6', **voo_6},
-    {'Objeto': 'voo_7', **voo_7},
-    {'Objeto': 'voo_8', **voo_8},
+    {'Objeto': 'voo_2', **voo_2}
 ]
 
-# Transformando a lista de voos em um DataFrame
+# Criando DataFrame
 df = pd.DataFrame(voos)
 
-# Extraindo as milhas e dinheiro do campo 'Milhas + dinheiro' e criando colunas separadas
-df['Milhas'] = df['Milhas + dinheiro'].apply(lambda x: x['Milhas'])
-df['Dinheiro'] = df['Milhas + dinheiro'].apply(lambda x: x['Dinheiro'])
+# Variáveis para cálculo de compra de milhas
+pontos_disponiveis = 8200  # Alterado para 9000 para testar
+custo_ponto = 0.45
 
-# Cálculo para Apenas Milhas vezes Apenas Dinheiro
-df['Apenas Milhas x Apenas Dinheiro'] = df['Apenas milhas'] * df['Apenas dinheiro']
+# Log dos pontos disponíveis e custo por ponto formatados
+pontos_disponiveis_formatado = f"{pontos_disponiveis:,.0f}".replace(',', '.')
+custo_ponto_formatado = f"R$ {custo_ponto:,.2f}".replace('.', ',')
 
-# Ordenando pelo cálculo de Apenas Milhas x Apenas Dinheiro
-df_sorted_milhas = df.sort_values(by='Apenas Milhas x Apenas Dinheiro')
+print(f"\nPontos disponíveis hoje: {pontos_disponiveis_formatado}")
+print(f"Preço de aquisição por 1 milha: {custo_ponto_formatado}\n")
 
-# Cálculo para (Milhas + Dinheiro) vezes Apenas Dinheiro
-df['Milhas+Dinheiro x Apenas Dinheiro'] = (df['Milhas'] + df['Dinheiro']) * df['Apenas dinheiro']
+# Função para calcular milhas faltantes e custo
+def calcular_milhas_faltantes(pontos_necessarios):
+    pontos_faltantes = max(0, pontos_necessarios - pontos_disponiveis)
+    custo_completar_milhas = pontos_faltantes * custo_ponto
+    return pontos_faltantes, custo_completar_milhas
 
-# Ordenando pelo cálculo de (Milhas + Dinheiro) x Apenas Dinheiro
-df_sorted_combined = df.sort_values(by='Milhas+Dinheiro x Apenas Dinheiro')
+# -----------------------------------------
+# Tabela 1: Apenas Milhas
+# -----------------------------------------
 
-# Função para formatar valores
-def formatar_dinheiro(valor):
-    return f'R$ {valor:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
+# Calculando apenas milhas
+df['Milhas faltantes'] = df['Apenas milhas'].apply(lambda x: calcular_milhas_faltantes(x)[0])
+df['R$ compra em milhas'] = df['Apenas milhas'].apply(lambda x: calcular_milhas_faltantes(x)[1])
+df['Utilizar milhas'] = df['R$ compra em milhas'].apply(lambda x: 'Sim' if x < df['Apenas dinheiro'].min() else 'Não')
 
-def formatar_milhas(valor):
-    return f'{valor:,}'.replace(',', '.')
+# Exibir a primeira tabela: Apenas Milhas
+tabela1 = df[['Objeto', 'Data voo', 'Escala', 'Utilizar milhas', 'Número do voo', 'Hora do voo', 'Apenas milhas', 'Apenas dinheiro', 'Milhas faltantes', 'R$ compra em milhas']].copy()
 
-def formatar_porcentagem(valor):
-    return f'{valor:,.1f}%'.replace(',', 'X').replace('.', ',').replace('X', '.')
+# Formatação dos valores
+tabela1['Apenas dinheiro'] = tabela1['Apenas dinheiro'].apply(lambda x: f'R$ {x:,.2f}'.replace(',', 'X').replace('.', ',', 1).replace('X', '.'))
+tabela1['Apenas milhas'] = tabela1['Apenas milhas'].apply(lambda x: f"{x:,.0f}".replace(',', '.'))
+tabela1['R$ compra em milhas'] = tabela1['R$ compra em milhas'].apply(lambda x: f'R$ {x:,.2f}'.replace(',', 'X').replace('.', ',', 1).replace('X', '.'))
 
-# Aplicando as formatações
-df_sorted_milhas['Apenas dinheiro'] = df_sorted_milhas['Apenas dinheiro'].apply(formatar_dinheiro)
-df_sorted_milhas['Apenas milhas'] = df_sorted_milhas['Apenas milhas'].apply(formatar_milhas)
+# Formatação da coluna de milhas faltantes
+tabela1['Milhas faltantes'] = tabela1['Milhas faltantes'].apply(lambda x: f"{x:,.0f}".replace(',', '.'))
 
-# Cálculo da porcentagem de aumento em relação ao menor valor em 'Apenas dinheiro'
-menor_valor = df_sorted_milhas['Apenas dinheiro'].str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float).min()
-df_sorted_milhas['% de Aumento'] = ((df_sorted_milhas['Apenas dinheiro'].str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float) - menor_valor) / menor_valor * 100).round(1)
-df_sorted_milhas['% de Aumento'] = df_sorted_milhas['% de Aumento'].apply(formatar_porcentagem)
+# Calcular o menor valor da tabela 1 para o cálculo de aumento
+def converter_para_float(x):
+    if isinstance(x, str):
+        return float(x.replace('R$ ', '').replace('.', '').replace(',', '.'))
+    elif isinstance(x, float):
+        return x
+    else:
+        return None
 
-# Formatação para a tabela ordenada por (Milhas + Dinheiro) x Apenas Dinheiro
-df_sorted_combined['Milhas + dinheiro'] = df_sorted_combined['Milhas + dinheiro'].apply(
-    lambda x: f"Milhas: {formatar_milhas(x['Milhas'])}, R$: {formatar_dinheiro(x['Dinheiro']).replace('R$ ', '')}"
+df['Apenas dinheiro'] = df['Apenas dinheiro'].apply(converter_para_float)
+menor_valor_tabela1 = df['Apenas dinheiro'].min()
+
+# Adicionar coluna de % de aumento na tabela 1
+tabela1['% de aumento'] = ((df['Apenas dinheiro'] - menor_valor_tabela1) / menor_valor_tabela1 * 100).round(1).astype(str) + '%'
+
+# Mover a coluna % de aumento para depois de Apenas dinheiro
+tabela1 = tabela1[['Objeto', 'Data voo', 'Escala', 'Utilizar milhas', 'Número do voo', 'Hora do voo', 'Apenas milhas', 'Apenas dinheiro', '% de aumento', 'Milhas faltantes', 'R$ compra em milhas']]
+
+# Ordenar a tabela 1 pelo valor em dinheiro
+tabela1 = tabela1.sort_values(by='Apenas dinheiro')
+
+# Exibir resultados da tabela 1
+print("Tabela 1: Apenas Dinheiro ou Milhas")
+print(tabulate(tabela1, headers='keys', tablefmt='pretty', showindex=False))
+
+# -----------------------------------------
+# Tabela 2: Milhas + Dinheiro
+# -----------------------------------------
+
+# Função para formatar 'Milhas + dinheiro' corretamente
+def formatar_milhas_dinheiro(x):
+    return f"{x['Milhas']:,} milhas + R$ {x['Dinheiro']:,.2f}".replace(',', 'X').replace('.', ',', 1).replace('X', '.')
+
+# Aplicar a função de formatação
+df['Milhas + dinheiro'] = df['Milhas + dinheiro'].apply(formatar_milhas_dinheiro)
+
+# Calculando milhas faltantes para milhas + dinheiro
+df['Milhas faltantes'] = df['Milhas + dinheiro'].apply(lambda x: calcular_milhas_faltantes(int(x.split(' milhas')[0].replace('.', '')))[0])
+df['R$ compra em milhas'] = df['Milhas + dinheiro'].apply(lambda x: calcular_milhas_faltantes(int(x.split(' milhas')[0].replace('.', '')))[1])
+
+# Cálculo do Valor Total (somando o valor do dinheiro + o custo das milhas faltantes)
+df['Valor Total'] = df['Milhas + dinheiro'].apply(lambda x: float(x.split('+ R$ ')[-1].replace('.', '').replace(',', '.'))) + df['R$ compra em milhas']
+
+# Adicionando a coluna 'Utilizar milhas' à tabela 2
+df['Utilizar milhas'] = df.apply(
+    lambda row: 'Sim' if (row['R$ compra em milhas'] + float(row['Milhas + dinheiro'].split('+ R$ ')[-1].replace('.', '').replace(',', '.'))) < menor_valor_tabela1 else 'Não',
+    axis=1
 )
-df_sorted_combined['Apenas dinheiro'] = df_sorted_combined['Apenas dinheiro'].apply(formatar_dinheiro)
 
-# Cálculo da porcentagem de aumento em relação ao menor valor em 'Apenas dinheiro' para a segunda parte
-menor_valor_combined = df_sorted_combined['Apenas dinheiro'].str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float).min()
-df_sorted_combined['% de Aumento'] = ((df_sorted_combined['Apenas dinheiro'].str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float) - menor_valor_combined) / menor_valor_combined * 100).round(1)
-df_sorted_combined['% de Aumento'] = df_sorted_combined['% de Aumento'].apply(formatar_porcentagem)
+# Corrigindo o cálculo da % de aumento na tabela 2 em relação ao menor valor da tabela 1
+df['% de aumento'] = ((df['Valor Total'] - menor_valor_tabela1) / menor_valor_tabela1 * 100).round(1).astype(str) + '%'
 
-# Ordenando os DataFrames pelas colunas de "Apenas dinheiro"
-df_sorted_milhas = df_sorted_milhas.sort_values(by='Apenas dinheiro', key=lambda x: x.str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float))
-df_sorted_combined = df_sorted_combined.sort_values(by='Apenas dinheiro', key=lambda x: x.str.replace('R$ ', '').str.replace('.', '').str.replace(',', '.').astype(float))
+# Exibir a segunda tabela: Milhas + Dinheiro
+tabela2 = df[['Objeto', 'Data voo', 'Escala', 'Utilizar milhas', 'Número do voo', 'Hora do voo', 'Milhas + dinheiro', '% de aumento', 'Valor Total', 'Milhas faltantes', 'R$ compra em milhas']].copy()
 
-# Exibir os resultados com tabulate, incluindo a nova coluna "Data voo"
-print("Ordenado por Apenas Milhas x Apenas Dinheiro, em ordem crescente de preço:")
-print(tabulate(df_sorted_milhas[['Data voo', 'Objeto', 'Número do voo', 'Hora do voo', 'Apenas milhas', 'Apenas dinheiro', '% de Aumento', 'Escala']],
-                headers='keys', tablefmt='pretty', showindex=False))
+# Formatando as colunas
+tabela2['R$ compra em milhas'] = tabela2['R$ compra em milhas'].apply(lambda x: f'R$ {x:,.2f}'.replace(',', 'X').replace('.', ',', 1).replace('X', '.'))
+tabela2['Valor Total'] = tabela2['Valor Total'].apply(lambda x: f'R$ {x:,.2f}'.replace(',', 'X').replace('.', ',', 1).replace('X', '.'))
 
-print("\nOrdenado por (Milhas + Dinheiro), em ordem crescente de preço:")
-print(tabulate(df_sorted_combined[['Data voo', 'Objeto', 'Número do voo', 'Hora do voo', 'Milhas + dinheiro', 'Apenas dinheiro', '% de Aumento', 'Escala']],
-                headers='keys', tablefmt='pretty', showindex=False))
+# Ordenar a tabela 2 pelo valor total
+tabela2 = tabela2.sort_values(by='Valor Total')
+
+# Exibir resultados da tabela 2
+print("\nTabela 2: Milhas + Dinheiro")
+print(tabulate(tabela2, headers='keys', tablefmt='pretty', showindex=False))
