@@ -3,42 +3,183 @@ from tabulate import tabulate
 
 # Definindo as variáveis para cada voo com a nova chave 'Data voo'
 voo_1 = {
-    'Data voo': '27/12/2024',
-    'Número do voo': '9164',
-    'Hora do voo': '03:20',
-    'Apenas milhas': 118000,
+    'Data voo': '26/10/2024',
+    'Número do voo': '2613',
+    'Hora do voo': '06:15',
+    'Apenas milhas': 130000,
     'Milhas + dinheiro': {
-        'Milhas': 11800,
-        'Dinheiro': 1732.00
+        'Milhas': 13000,
+        'Dinheiro': 2551.00
     },
-    'Apenas dinheiro': 2339.45,
+    'Apenas dinheiro': 3120.46,
     'Escala': 'Direto'
 }
 
 voo_2 = {
+    'Data voo': '26/10/2024',
+    'Número do voo': '2778',
+    'Hora do voo': '10:05',
+    'Apenas milhas': 96000,
+    'Milhas + dinheiro': {
+        'Milhas': 14400,
+        'Dinheiro': 1097.00
+    },
+    'Apenas dinheiro': 1490.46,
+    'Escala': 'Direto'
+}
+
+voo_3 = {
+    'Data voo': '26/10/2024',
+    'Número do voo': '2508',
+    'Hora do voo': '14:20',
+    'Apenas milhas': 130000,
+    'Milhas + dinheiro': {
+        'Milhas': 13000,
+        'Dinheiro': 3061.00
+    },
+    'Apenas dinheiro': 3720.46,
+    'Escala': 'Direto'
+}
+
+voo_4 = {
+    'Data voo': '26/10/2024',
+    'Número do voo': '4918',
+    'Hora do voo': '19:15',
+    'Apenas milhas': 130000,
+    'Milhas + dinheiro': {
+        'Milhas': 13000,
+        'Dinheiro': 2918.00
+    },
+    'Apenas dinheiro': 3552.46,
+    'Escala': 'Direto'
+}
+
+voo_5 = {
+    'Data voo': '26/10/2024',
+    'Número do voo': '4368',
+    'Hora do voo': '23:40',
+    'Apenas milhas': 130000,
+    'Milhas + dinheiro': {
+        'Milhas': 13000,
+        'Dinheiro': 2553.00
+    },
+    'Apenas dinheiro': 3122.46,
+    'Escala': 'Direto'
+}
+
+voo_6 = {
+    'Data voo': '26/10/2024',
+    'Número do voo': '4147',
+    'Hora do voo': '11:35',
+    'Apenas milhas': 116000,
+    'Milhas + dinheiro': {
+        'Milhas': 13950,
+        'Dinheiro': 1643.00
+    },
+    'Apenas dinheiro': 2226.09,
+    'Escala': '1 conexão'
+}
+
+# Definindo os voos de 27/12
+voo_7 = {
     'Data voo': '27/12/2024',
     'Número do voo': '2613',
-    'Hora do voo': '06:20',
-    'Apenas milhas': 92000,
+    'Hora do voo': '06:15',
+    'Apenas milhas': 130000,
     'Milhas + dinheiro': {
-        'Milhas': 9200,
-        'Dinheiro': 1343.00
+        'Milhas': 13000,
+        'Dinheiro': 2551.00
     },
-    'Apenas dinheiro': 1699.46,
+    'Apenas dinheiro': 2614.46,
     'Escala': 'Direto'
+}
+
+voo_8 = {
+    'Data voo': '27/12/2024',
+    'Número do voo': '2778',
+    'Hora do voo': '10:05',
+    'Apenas milhas': 96000,
+    'Milhas + dinheiro': {
+        'Milhas': 14400,
+        'Dinheiro': 1097.00
+    },
+    'Apenas dinheiro': 1490.46,
+    'Escala': 'Direto'
+}
+
+voo_9 = {
+    'Data voo': '27/12/2024',
+    'Número do voo': '4849',
+    'Hora do voo': '14:20',
+    'Apenas milhas': 130000,
+    'Milhas + dinheiro': {
+        'Milhas': 13000,
+        'Dinheiro': 3061.00
+    },
+    'Apenas dinheiro': 3861.09,
+    'Escala': 'Direto'
+}
+
+voo_10 = {
+    'Data voo': '27/12/2024',
+    'Número do voo': '4918',
+    'Hora do voo': '19:15',
+    'Apenas milhas': 130000,
+    'Milhas + dinheiro': {
+        'Milhas': 13000,
+        'Dinheiro': 2918.00
+    },
+    'Apenas dinheiro': 2614.46,
+    'Escala': 'Direto'
+}
+
+voo_11 = {
+    'Data voo': '27/12/2024',
+    'Número do voo': '4368',
+    'Hora do voo': '23:30',
+    'Apenas milhas': 130000,
+    'Milhas + dinheiro': {
+        'Milhas': 13000,
+        'Dinheiro': 2553.00
+    },
+    'Apenas dinheiro': 3122.46,
+    'Escala': 'Direto'
+}
+
+voo_12 = {
+    'Data voo': '27/12/2024',
+    'Número do voo': '4147',
+    'Hora do voo': '11:35',
+    'Apenas milhas': 116000,
+    'Milhas + dinheiro': {
+        'Milhas': 13950,
+        'Dinheiro': 1643.00
+    },
+    'Apenas dinheiro': 2855.46,
+    'Escala': '1 conexão'
 }
 
 # Criando a lista de voos
 voos = [
     {'Objeto': 'voo_1', **voo_1},
-    {'Objeto': 'voo_2', **voo_2}
+    {'Objeto': 'voo_2', **voo_2},
+    {'Objeto': 'voo_3', **voo_3},
+    {'Objeto': 'voo_4', **voo_4},
+    {'Objeto': 'voo_5', **voo_5},
+    {'Objeto': 'voo_6', **voo_6},
+    {'Objeto': 'voo_7', **voo_7},
+    {'Objeto': 'voo_8', **voo_8},
+    {'Objeto': 'voo_9', **voo_9},
+    {'Objeto': 'voo_10', **voo_10},
+    {'Objeto': 'voo_11', **voo_11},
+    {'Objeto': 'voo_12', **voo_12}
 ]
 
 # Criando DataFrame
 df = pd.DataFrame(voos)
 
 # Variáveis para cálculo de compra de milhas
-pontos_disponiveis = 8200  # Alterado para 9000 para testar
+pontos_disponiveis = 9000  # Alterado para 9000 para testar
 custo_ponto = 0.45
 
 # Log dos pontos disponíveis e custo por ponto formatados
